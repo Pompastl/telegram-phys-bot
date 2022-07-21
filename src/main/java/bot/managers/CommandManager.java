@@ -7,14 +7,9 @@ public class CommandManager extends MessageHandler {
     }
 
 
-    public String getResult()
-    {
-        String out = commandHandler();
-        return super.getResult(out);
-    }
 
 
-    private String commandHandler()
+    public String commandHandler()
     {
         String out = "";
 

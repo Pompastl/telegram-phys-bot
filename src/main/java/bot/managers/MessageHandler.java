@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MessageHandler {
+class MessageHandler {
 
     public final String USER_TEXT;
     public ArrayList<String> valueAll;
-    public Map<String, Integer> variableValue = new HashMap<>();
+    public Map<UnknowValue, Integer> variableValue = new HashMap<>();
     public InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
 
     public boolean waitingNum;
@@ -24,12 +24,12 @@ public class MessageHandler {
         this.USER_TEXT = USER_TEXT;
     }
 
-    public void cleanAllValue(){
-        variableValue.put("S", 0);
-        variableValue.put("V", 0);
-        variableValue.put("t", 0);
-        variableValue.put("a", 0);
-    }
+//    public void cleanAllValue(){
+//        variableValue.put("S", 0);
+//        variableValue.put("V", 0);
+//        variableValue.put("t", 0);
+//        variableValue.put("a", 0);
+//    }
 
     public String getAllVales()
     {
@@ -41,10 +41,10 @@ public class MessageHandler {
         {
             case "/theme_kin":
 
-                out += "S = " + variableValue.get("S") + "\n";
-                out += "V = " + variableValue.get("V") + "\n";
-                out += "t = " + variableValue.get("t") + "\n";
-                out += "a = " + variableValue.get("a");
+                out += "S = " + variableValue.get(UnknowValue.DISTANCE) + "\n";
+                out += "V = " + variableValue.get(UnknowValue.SPEED) + "\n";
+                out += "t = " + variableValue.get(UnknowValue.TIME) + "\n";
+                out += "a = " + variableValue.get(UnknowValue.BOOST);
 
                 valueAll.add("S");
                 valueAll.add("V");

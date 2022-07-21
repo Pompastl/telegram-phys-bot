@@ -1,8 +1,6 @@
 package bot;
 
-import bot.managers.CommandManager;
-import bot.managers.KeyBoardManager;
-import bot.managers.MatchManager;
+import bot.managers.*;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
@@ -18,7 +16,8 @@ public class Bot1 extends TelegramLongPollingBot {
     private static final String BOT_NAME = "Phys_helper_match_bot";
 
     MatchManager matchManager;
-    String call;
+    UnknownsValueSetManager setValue = new UnknownsValueSetManager();
+    UnknowValue value;
     int messageId;
     boolean waitNum;
 
@@ -41,20 +40,20 @@ public class Bot1 extends TelegramLongPollingBot {
             if (isCommand)
             {
                 CommandManager cManager = new CommandManager(userMessage);
-                outToUser = cManager.getResult();
+                outToUser = cManager.commandHandler();
                 outMessage(outToUser, chatId, cManager.markup);
                 matchManager = new MatchManager(userMessage);
             }
 
             if (isNum)
             {
-                matchManager.setValue(call, Integer.parseInt(userMessage));
+                matchManager.setValue(value, Integer.parseInt(userMessage));
                 outToUser = matchManager.getAllVales();
 
 //                outMessage(outToUser, chatId, matchManager.markup);
 //                editMessage(outToUser, chatId, messageId, matchManager.markup);
 
-                deleteMessage(chatId, update.getMessage().getMessageId());                                               
+                deleteMessage(chatId, update.getMessage().getMessageId());
                 editMessage(outToUser, chatId, messageId, matchManager.markup);
 
 
@@ -65,11 +64,13 @@ public class Bot1 extends TelegramLongPollingBot {
 
         if (isCallBack)
         {
-            call = update.getCallbackQuery().getData();
+
+            String call = update.getCallbackQuery().getData();
             messageId = update.getCallbackQuery().getMessage().getMessageId();
             boolean isKnowValue = call.contains("_VALUE");
             boolean isSetUnknownValue = call.equals("X");
             boolean isUnknownValue = call.contains("_N");
+            value = setValue.setUnknownValue(call);
 
             if (isKnowValue)
             {
@@ -92,7 +93,7 @@ public class Bot1 extends TelegramLongPollingBot {
 
             if (isUnknownValue)
             {
-                String outToUser = matchManager.getResult(call.charAt(0) + "");
+                String outToUser = matchManager.getOutTask(value);                                     ///TODO: НЕ ЗАБУДЬ
                 editMessage(outToUser, chatId, messageId, new InlineKeyboardMarkup());
             }
         }
