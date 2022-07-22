@@ -14,6 +14,8 @@ public class KeyBoardManager {
         List<List<InlineKeyboardButton>> totalRow = new ArrayList<>();
         List<InlineKeyboardButton> row1 = new ArrayList<>();
         List<InlineKeyboardButton> row2 = new ArrayList<>();
+        List<InlineKeyboardButton> row3 = new ArrayList<>();
+        List<InlineKeyboardButton> unknownButton = new ArrayList<>();
 
         ArrayList<InlineKeyboardButton> buttons = new ArrayList<>();
 
@@ -31,14 +33,24 @@ public class KeyBoardManager {
             if (i <= 2)
             {
                 row1.add(buttons.get(i));
-            } else row2.add(buttons.get(i));
+            }
+
+            if (i > 2 && i <= 5)
+            {
+                row2.add(buttons.get(i));
+            }
+
+            if (i > 5)
+            {
+                row3.add(buttons.get(i));
+            }
         }
 
         if (isKnowValue)
         {
             InlineKeyboardButton button = new InlineKeyboardButton("X");
             button.setCallbackData("X");
-            row2.add(button);
+            unknownButton.add(button);
         }
 
 
@@ -46,6 +58,8 @@ public class KeyBoardManager {
 
         totalRow.add(row1);
         totalRow.add(row2);
+        totalRow.add(row3);
+        totalRow.add(unknownButton);
 
         return totalRow;
     }

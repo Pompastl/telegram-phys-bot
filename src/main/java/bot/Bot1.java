@@ -12,12 +12,11 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class Bot1 extends TelegramLongPollingBot {
 
-    private static final String TOKEN = "5518812439:AAEzksKfHlWWK8eZZlzPa9Fd_UQbMeCZJak";
+    private static final String TOKEN = "";
     private static final String BOT_NAME = "Phys_helper_match_bot";
 
     MatchManager matchManager;
-    UnknownsValueSetManager setValue = new UnknownsValueSetManager();
-    UnknowValue value;
+    UnknownValue value;
     int messageId;
     boolean waitNum;
 
@@ -37,6 +36,7 @@ public class Bot1 extends TelegramLongPollingBot {
             boolean isCommand = update.getMessage().isCommand();
             boolean isNum = waitNum && update.getMessage().getText().matches("[\\d]++");
 
+
             if (isCommand)
             {
                 CommandManager cManager = new CommandManager(userMessage);
@@ -47,11 +47,9 @@ public class Bot1 extends TelegramLongPollingBot {
 
             if (isNum)
             {
-                matchManager.setValue(value, Integer.parseInt(userMessage));
+                matchManager.setValue(value, Integer.parseInt(userMessage));                            //TO
                 outToUser = matchManager.getAllVales();
 
-//                outMessage(outToUser, chatId, matchManager.markup);
-//                editMessage(outToUser, chatId, messageId, matchManager.markup);
 
                 deleteMessage(chatId, update.getMessage().getMessageId());
                 editMessage(outToUser, chatId, messageId, matchManager.markup);
@@ -70,7 +68,8 @@ public class Bot1 extends TelegramLongPollingBot {
             boolean isKnowValue = call.contains("_VALUE");
             boolean isSetUnknownValue = call.equals("X");
             boolean isUnknownValue = call.contains("_N");
-            value = setValue.setUnknownValue(call);
+            //value = matchManager.setUnknownValue(call);
+            value = new MatchManager(call).setUnknownValue(call);
 
             if (isKnowValue)
             {
@@ -86,14 +85,14 @@ public class Bot1 extends TelegramLongPollingBot {
 
                 InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
                 markup.setKeyboard(keyBoardManager.getAllValue(matchManager.valueAll, false));
-                //outMessage(outToUser, chatId, markup);
+
                 editMessage(outToUser, chatId, messageId, markup);
             }
 
 
             if (isUnknownValue)
             {
-                String outToUser = matchManager.getOutTask(value);                                     ///TODO: НЕ ЗАБУДЬ
+                String outToUser = matchManager.getOutTask(value);
                 editMessage(outToUser, chatId, messageId, new InlineKeyboardMarkup());
             }
         }
